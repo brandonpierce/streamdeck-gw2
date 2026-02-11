@@ -1,0 +1,25 @@
+{
+  "name": "io.piercefamily.gw2",
+  "version": "0.1.0",
+  "description": "Guild Wars 2 MumbleLink integration for Stream Deck",
+  "main": "io.piercefamily.gw2.sdPlugin/bin/plugin.js",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'No build step required'",
+    "link": "streamdeck link io.piercefamily.gw2.sdPlugin",
+    "restart": "streamdeck restart io.piercefamily.gw2",
+    "test:mumble": "node io.piercefamily.gw2.sdPlugin/src/test-mumble.js",
+    "test:cache": "node io.piercefamily.gw2.sdPlugin/src/test-cache.js"
+  },
+  "dependencies": {
+    "@elgato/streamdeck": "^2.0.0",
+    "better-sqlite3": "^11.0.0",
+    "koffi": "^2.8.0"
+  },
+  "devDependencies": {
+    "@elgato/cli": "^1.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

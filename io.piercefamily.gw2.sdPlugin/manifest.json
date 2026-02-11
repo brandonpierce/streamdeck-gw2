@@ -1,0 +1,153 @@
+{
+  "UUID": "io.piercefamily.gw2",
+  "Name": "GW2 MumbleLink",
+  "Version": "0.1.0",
+  "Author": "piercefamily",
+  "Description": "Real-time Guild Wars 2 status via MumbleLink shared memory",
+  "Category": "Guild Wars 2",
+  "CategoryIcon": "imgs/category-icon",
+  "Icon": "imgs/plugin-icon",
+  "CodePath": "bin/plugin.js",
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.4"
+  },
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Nodejs": {
+    "Version": "20",
+    "Debug": "enabled"
+  },
+  "Actions": [
+    {
+      "Name": "Profession & Spec",
+      "UUID": "io.piercefamily.gw2.profession",
+      "Icon": "imgs/actions/profession",
+      "Tooltip": "Shows current character profession and elite specialization",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/profession",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "Game Mode",
+      "UUID": "io.piercefamily.gw2.gamemode",
+      "Icon": "imgs/actions/gamemode",
+      "Tooltip": "Shows current game mode (Open World, WvW, PvP, etc.)",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/gamemode",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "Map Name",
+      "UUID": "io.piercefamily.gw2.mapname",
+      "Icon": "imgs/actions/mapname",
+      "Tooltip": "Shows current map name",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/mapname",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "Combat Status",
+      "UUID": "io.piercefamily.gw2.combat",
+      "Icon": "imgs/actions/combat",
+      "Tooltip": "Shows whether character is in combat",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/combat",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "Chat Focus",
+      "UUID": "io.piercefamily.gw2.chatfocus",
+      "Icon": "imgs/actions/chatfocus",
+      "Tooltip": "Shows whether chat textbox has focus",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/chatfocus",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "Commander",
+      "UUID": "io.piercefamily.gw2.commander",
+      "Icon": "imgs/actions/commander",
+      "Tooltip": "Shows whether commander tag is active",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/commander",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "Mount",
+      "UUID": "io.piercefamily.gw2.mount",
+      "Icon": "imgs/actions/mount",
+      "Tooltip": "Shows current mount",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/mount",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "WvW Team",
+      "UUID": "io.piercefamily.gw2.wvwteam",
+      "Icon": "imgs/actions/wvwteam",
+      "Tooltip": "Shows WvW team color assignment",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/wvwteam",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    },
+    {
+      "Name": "Game Focus",
+      "UUID": "io.piercefamily.gw2.gamefocus",
+      "Icon": "imgs/actions/gamefocus",
+      "Tooltip": "Shows whether GW2 is the active window",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/gamefocus",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
+    }
+  ]
+}
