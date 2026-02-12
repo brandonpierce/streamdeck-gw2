@@ -65,6 +65,21 @@ export class StateManager {
   }
 
   /**
+   * Get the raw better-sqlite3 database handle.
+   * Used by the TP subsystem which manages its own tables.
+   */
+  getDb() {
+    return this.#cacheDb.db;
+  }
+
+  /**
+   * Get the shared API client instance.
+   */
+  getApiClient() {
+    return this.#apiClient;
+  }
+
+  /**
    * Start polling MumbleLink.
    */
   start() {

@@ -132,6 +132,48 @@ export class GW2ApiClient {
   }
 
   /**
+   * Fetch all tradeable item IDs from the Trading Post.
+   * @returns {Promise<number[]|null>}
+   */
+  async getAllTradeableItemIds() {
+    const data = await this.#fetch("/commerce/prices");
+    if (!data || !Array.isArray(data)) return null;
+    return data;
+  }
+
+  /**
+   * Fetch items by IDs (batch, max 200 per call).
+   * @param {number[]} ids
+   * @returns {Promise<Array<{id: number, name: string, rarity: string, icon: string|null}>|null>}
+   */
+  async getItems(ids) {
+    if (!ids || ids.length === 0) return [];
+    const data = await this.#fetch(`/items?ids=${ids.join(",")}`);
+    if (!data || !Array.isArray(data)) return null;
+    return data.map((item) => ({
+      id: item.id,
+      name: item.name,
+      rarity: item.rarity || "Basic",
+      icon: item.icon || null,
+    }));
+  }
+
+  /**
+   * Fetch Trading Post price for a single item.
+   * @param {number} itemId
+   * @returns {Promise<{id: number, buys: {unit_price: number, quantity: number}, sells: {unit_price: number, quantity: number}}|null>}
+   */
+  async getItemPrice(itemId) {
+    const data = await this.#fetch(`/commerce/prices/${itemId}`);
+    if (!data) return null;
+    return {
+      id: data.id,
+      buys: data.buys || { unit_price: 0, quantity: 0 },
+      sells: data.sells || { unit_price: 0, quantity: 0 },
+    };
+  }
+
+  /**
    * Core fetch with rate limiting and error handling.
    */
   async #fetch(endpoint) {

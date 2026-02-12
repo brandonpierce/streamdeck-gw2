@@ -148,6 +148,21 @@
           "FontSize": "9"
         }
       ]
+    },
+    {
+      "Name": "TP Price",
+      "UUID": "io.piercefamily.gw2.tpprice",
+      "Icon": "imgs/actions/tpprice",
+      "Tooltip": "Shows Trading Post price for a chosen item",
+      "PropertyInspectorPath": "ui/tp-price-pi.html",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "imgs/actions/tpprice",
+          "TitleAlignment": "middle",
+          "FontSize": "9"
+        }
+      ]
     }
   ]
 }

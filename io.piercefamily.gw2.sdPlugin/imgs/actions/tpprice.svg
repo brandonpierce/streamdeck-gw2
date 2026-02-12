@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 72 72">
+  <rect width="72" height="72" rx="8" fill="#2d2d2d"/>
+  <text x="36" y="28" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#ffd700" font-weight="bold">TP</text>
+  <text x="36" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" fill="#ffd700">$</text>
+</svg>

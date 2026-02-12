@@ -22,15 +22,22 @@ import { MountAction } from "../src/actions/mount.js";
 import { WvWTeamAction } from "../src/actions/wvw-team.js";
 import { GameFocusAction } from "../src/actions/game-focus.js";
 
+// Trading Post modules
+import { TpItemIndex } from "../src/cache/tp-item-index.js";
+import { TpPricesCache } from "../src/cache/tp-prices.js";
+import { TpPriceAction } from "../src/actions/tp-price.js";
+
 // --- Resolve data directory ---
 // The Stream Deck SDK provides a data directory for persistent storage.
 // During development/testing, fall back to a local directory.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = process.env.GW2_SD_DATA_DIR || path.join(__dirname, "..", "data");
 
+const logger = streamDeck.logger.createScope("Plugin");
+
 // --- Initialize ---
-console.log("[Plugin] Starting GW2 MumbleLink plugin...");
-console.log(`[Plugin] Data directory: ${DATA_DIR}`);
+logger.info("Starting GW2 MumbleLink plugin...");
+logger.info(`Data directory: ${DATA_DIR}`);
 
 // Ensure data directory exists
 import { mkdirSync } from "fs";
@@ -54,32 +61,42 @@ streamDeck.actions.registerAction(new MountAction(stateManager));
 streamDeck.actions.registerAction(new WvWTeamAction(stateManager));
 streamDeck.actions.registerAction(new GameFocusAction(stateManager));
 
+// --- Trading Post subsystem ---
+const tpItemIndex = new TpItemIndex(stateManager.getDb(), stateManager.getApiClient());
+const tpPricesCache = new TpPricesCache(stateManager.getDb(), stateManager.getApiClient());
+streamDeck.actions.registerAction(new TpPriceAction(tpItemIndex, tpPricesCache));
+
 // --- Connect to Stream Deck and start ---
 streamDeck.connect().then(() => {
-  console.log("[Plugin] Connected to Stream Deck");
+  logger.info("Connected to Stream Deck");
   stateManager.start();
+
+  // Build TP item index in background (no-op if already fresh)
+  tpItemIndex.build().catch((err) => {
+    logger.error("TP item index build failed:", err.message);
+  });
 }).catch((err) => {
-  console.error("[Plugin] Failed to connect to Stream Deck:", err.message);
+  logger.error("Failed to connect to Stream Deck:", err.message);
 });
 
 // --- Graceful shutdown ---
 process.on("SIGINT", () => {
-  console.log("[Plugin] Shutting down...");
+  logger.info("Shutting down...");
   stateManager.stop();
   process.exit(0);
 });
 
 process.on("SIGTERM", () => {
-  console.log("[Plugin] Shutting down...");
+  logger.info("Shutting down...");
   stateManager.stop();
   process.exit(0);
 });
 
 // Handle uncaught errors gracefully
 process.on("uncaughtException", (err) => {
-  console.error("[Plugin] Uncaught exception:", err);
+  logger.error("Uncaught exception:", err);
 });
 
 process.on("unhandledRejection", (reason) => {
-  console.error("[Plugin] Unhandled rejection:", reason);
+  logger.error("Unhandled rejection:", reason);
 });

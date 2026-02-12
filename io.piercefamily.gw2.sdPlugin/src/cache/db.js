@@ -15,7 +15,7 @@ import { WVW_TEAM_COLORS_SEED } from "../seed/wvw-team-colors.js";
 import { MOUNTS_SEED } from "../seed/mounts.js";
 import { PROFESSIONS_SEED } from "../seed/professions.js";
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 export class CacheDatabase {
   #db = null;
@@ -96,6 +96,26 @@ export class CacheDatabase {
       CREATE TABLE IF NOT EXISTS wvw_team_colors (
         id          INTEGER PRIMARY KEY,
         name        TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS tp_items (
+        id          INTEGER PRIMARY KEY,
+        name        TEXT NOT NULL,
+        rarity      TEXT,
+        icon_url    TEXT,
+        fetched_at  INTEGER NOT NULL
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_tp_items_name
+        ON tp_items(name COLLATE NOCASE);
+
+      CREATE TABLE IF NOT EXISTS tp_prices (
+        item_id        INTEGER PRIMARY KEY,
+        buy_price      INTEGER NOT NULL DEFAULT 0,
+        sell_price     INTEGER NOT NULL DEFAULT 0,
+        buy_quantity   INTEGER NOT NULL DEFAULT 0,
+        sell_quantity  INTEGER NOT NULL DEFAULT 0,
+        fetched_at     INTEGER NOT NULL
       );
 
       CREATE TABLE IF NOT EXISTS schema_meta (

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>TP Price Settings</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 12px;
+      color: #ccc;
+      background: #2d2d2d;
+      margin: 0;
+      padding: 8px;
+    }
+    .sdpi-wrapper {
+      margin-bottom: 8px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      color: #9b9b9b;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 6px 8px;
+      background: #3b3b3b;
+      border: 1px solid #555;
+      border-radius: 3px;
+      color: #ddd;
+      font-size: 12px;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: #77b;
+    }
+    .status {
+      padding: 8px;
+      text-align: center;
+      color: #999;
+      font-style: italic;
+    }
+    .current-item {
+      padding: 8px;
+      background: #383838;
+      border-radius: 3px;
+      margin-bottom: 8px;
+    }
+    .current-item .name {
+      font-weight: bold;
+      color: #eee;
+    }
+    .current-item .rarity {
+      font-size: 10px;
+      color: #999;
+      margin-left: 6px;
+    }
+    .results {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .result-item {
+      padding: 6px 8px;
+      cursor: pointer;
+      border-radius: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .result-item:hover {
+      background: #444;
+    }
+    .result-item .rarity {
+      font-size: 10px;
+      color: #999;
+    }
+    .rarity-Legendary { color: #a08cda; }
+    .rarity-Ascended { color: #fb3e8d; }
+    .rarity-Exotic { color: #ffa405; }
+    .rarity-Rare { color: #fcd00b; }
+    .rarity-Masterwork { color: #1a9306; }
+    .rarity-Fine { color: #62a4da; }
+    .rarity-Basic { color: #aaa; }
+    .rarity-Junk { color: #aaa; }
+  </style>
+</head>
+<body>
+  <div class="sdpi-wrapper">
+    <div id="currentItem" class="current-item" style="display:none;">
+      <span>Tracking: </span>
+      <span id="currentName" class="name"></span>
+      <span id="currentRarity" class="rarity"></span>
+    </div>
+  </div>
+
+  <div class="sdpi-wrapper">
+    <label for="searchInput">Search Items</label>
+    <input type="text" id="searchInput" placeholder="Type item name (min 2 chars)..." />
+  </div>
+
+  <div id="indexStatus" class="status" style="display:none;">
+    Building item index...
+  </div>
+
+  <div id="results" class="results"></div>
+
+  <script>
+    // Stream Deck Property Inspector WebSocket communication
+    let websocket = null;
+    let pluginUUID = null;
+    let actionInfo = null;
+    let currentSettings = {};
+
+    // Called by the Stream Deck software when the PI is loaded
+    function connectElgatoStreamDeckSocket(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo) {
+      pluginUUID = inPropertyInspectorUUID;
+      actionInfo = JSON.parse(inActionInfo);
+      currentSettings = actionInfo.payload.settings || {};
+
+      websocket = new WebSocket("ws://127.0.0.1:" + inPort);
+
+      websocket.onopen = function () {
+        // Register this Property Inspector
+        websocket.send(JSON.stringify({
+          event: inRegisterEvent,
+          uuid: pluginUUID
+        }));
+
+        // Show current item if configured
+        updateCurrentItem();
+
+        // Ask plugin for index status
+        sendToPlugin({ event: "getIndexStatus" });
+      };
+
+      websocket.onmessage = function (evt) {
+        const msg = JSON.parse(evt.data);
+
+        if (msg.event === "sendToPropertyInspector") {
+          handlePluginMessage(msg.payload);
+        }
+
+        if (msg.event === "didReceiveSettings") {
+          currentSettings = msg.payload.settings || {};
+          updateCurrentItem();
+        }
+      };
+    }
+
+    function sendToPlugin(payload) {
+      if (!websocket || websocket.readyState !== 1) return;
+      websocket.send(JSON.stringify({
+        action: actionInfo.action,
+        event: "sendToPlugin",
+        context: pluginUUID,
+        payload: payload
+      }));
+    }
+
+    function setSettings(settings) {
+      if (!websocket || websocket.readyState !== 1) return;
+      currentSettings = settings;
+      websocket.send(JSON.stringify({
+        event: "setSettings",
+        context: pluginUUID,
+        payload: settings
+      }));
+      updateCurrentItem();
+    }
+
+    function handlePluginMessage(payload) {
+      if (payload.event === "searchResults") {
+        renderResults(payload.results || []);
+        updateIndexStatus(payload.indexReady, payload.indexBuilding);
+      }
+
+      if (payload.event === "indexStatus") {
+        updateIndexStatus(payload.indexReady, payload.indexBuilding);
+      }
+    }
+
+    function updateCurrentItem() {
+      const el = document.getElementById("currentItem");
+      if (currentSettings.itemId) {
+        el.style.display = "block";
+        document.getElementById("currentName").textContent = currentSettings.itemName || "Unknown";
+        const rarityEl = document.getElementById("currentRarity");
+        rarityEl.textContent = currentSettings.itemRarity || "";
+        rarityEl.className = "rarity rarity-" + (currentSettings.itemRarity || "");
+      } else {
+        el.style.display = "none";
+      }
+    }
+
+    function updateIndexStatus(ready, building) {
+      const el = document.getElementById("indexStatus");
+      if (!ready && building) {
+        el.style.display = "block";
+        el.textContent = "Building item index... Search may be limited.";
+      } else if (!ready && !building) {
+        el.style.display = "block";
+        el.textContent = "Item index not ready. It will build on next plugin start.";
+      } else {
+        el.style.display = "none";
+      }
+    }
+
+    function renderResults(results) {
+      const container = document.getElementById("results");
+      if (results.length === 0) {
+        const query = document.getElementById("searchInput").value;
+        container.innerHTML = query.length >= 2
+          ? '<div class="status">No items found</div>'
+          : '';
+        return;
+      }
+
+      container.innerHTML = results.map(function (item) {
+        return '<div class="result-item" data-id="' + item.id + '" data-name="' + escapeHtml(item.name) + '" data-rarity="' + (item.rarity || '') + '">'
+          + '<span class="rarity-' + (item.rarity || '') + '">' + escapeHtml(item.name) + '</span>'
+          + '<span class="rarity">' + (item.rarity || '') + '</span>'
+          + '</div>';
+      }).join('');
+
+      // Attach click handlers
+      container.querySelectorAll(".result-item").forEach(function (el) {
+        el.addEventListener("click", function () {
+          setSettings({
+            itemId: Number(el.dataset.id),
+            itemName: el.dataset.name,
+            itemRarity: el.dataset.rarity
+          });
+          document.getElementById("searchInput").value = "";
+          container.innerHTML = "";
+        });
+      });
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Debounced search
+    var debounceTimer = null;
+    document.getElementById("searchInput").addEventListener("input", function () {
+      clearTimeout(debounceTimer);
+      var query = this.value.trim();
+      if (query.length < 2) {
+        document.getElementById("results").innerHTML = "";
+        return;
+      }
+      debounceTimer = setTimeout(function () {
+        sendToPlugin({ event: "searchItems", query: query });
+      }, 250);
+    });
+  </script>
+</body>
+</html>
