@@ -3,6 +3,10 @@
  * Lazy-fetches from the GW2 API on cache miss.
  */
 
+import streamDeck from "@elgato/streamdeck";
+
+const logger = streamDeck.logger.createScope("MapsCache");
+
 const STALE_AFTER_DAYS = 30;
 
 export class MapsCache {
@@ -63,7 +67,7 @@ export class MapsCache {
         this.#stmtUpsert.run(data.id, data.name, now);
       }
     } catch (err) {
-      console.error(`[MapsCache] Failed to fetch map ${mapId}:`, err.message);
+      logger.error(`Failed to fetch map ${mapId}:`, err.message);
     }
   }
 

@@ -14,6 +14,7 @@
  *   fallback until the next poll cycle picks up the cached value.
  */
 
+import streamDeck from "@elgato/streamdeck";
 import { MumbleLinkReader } from "./mumble-reader.js";
 import { GW2ApiClient } from "./gw2-api-client.js";
 import { CacheDatabase } from "./cache/db.js";
@@ -23,6 +24,8 @@ import { SpecializationsCache } from "./cache/specializations.js";
 import { MountsCache } from "./cache/mounts.js";
 import { MapTypesCache } from "./cache/map-types.js";
 import { WvWTeamColorsCache } from "./cache/wvw-team-colors.js";
+
+const logger = streamDeck.logger.createScope("StateManager");
 
 const POLL_INTERVAL_MS = 500;
 
@@ -85,11 +88,11 @@ export class StateManager {
   start() {
     const opened = this.#reader.open();
     if (!opened) {
-      console.error("[StateManager] Failed to open MumbleLink — will retry on next poll");
+      logger.error("Failed to open MumbleLink — will retry on next poll");
     }
 
     this.#pollTimer = setInterval(() => this.#poll(), POLL_INTERVAL_MS);
-    console.log(`[StateManager] Polling started (${POLL_INTERVAL_MS}ms interval)`);
+    logger.info(`Polling started (${POLL_INTERVAL_MS}ms interval)`);
 
     // Run first poll immediately
     this.#poll();
@@ -105,7 +108,7 @@ export class StateManager {
     }
     this.#reader.close();
     this.#cacheDb.close();
-    console.log("[StateManager] Stopped");
+    logger.info("Stopped");
   }
 
   /**
@@ -246,7 +249,7 @@ export class StateManager {
           try {
             cb(newState[field], newState);
           } catch (err) {
-            console.error(`[StateManager] Listener error for '${field}':`, err.message);
+            logger.error(`Listener error for '${field}':`, err.message);
           }
         }
       }
@@ -259,7 +262,7 @@ export class StateManager {
         try {
           cb(changedFields, newState);
         } catch (err) {
-          console.error("[StateManager] Wildcard listener error:", err.message);
+          logger.error("Wildcard listener error:", err.message);
         }
       }
     }

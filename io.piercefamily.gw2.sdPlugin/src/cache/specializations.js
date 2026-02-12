@@ -8,6 +8,10 @@
  * We resolve these via /v2/specializations/<id> from the GW2 API.
  */
 
+import streamDeck from "@elgato/streamdeck";
+
+const logger = streamDeck.logger.createScope("SpecializationsCache");
+
 const STALE_AFTER_DAYS = 90;
 
 export class SpecializationsCache {
@@ -70,8 +74,8 @@ export class SpecializationsCache {
         );
       }
     } catch (err) {
-      console.error(
-        `[SpecializationsCache] Failed to fetch spec ${specId}:`,
+      logger.error(
+        `Failed to fetch spec ${specId}:`,
         err.message
       );
     }

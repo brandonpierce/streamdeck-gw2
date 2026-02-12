@@ -9,6 +9,10 @@
  * Progress is tracked in schema_meta so partial builds can resume.
  */
 
+import streamDeck from "@elgato/streamdeck";
+
+const logger = streamDeck.logger.createScope("TpItemIndex");
+
 const STALE_AFTER_DAYS = 7;
 const BATCH_SIZE = 200;
 
@@ -80,32 +84,32 @@ export class TpItemIndex {
    */
   async build() {
     if (this.#building) return;
-    console.log("[TpItemIndex] build() called, ready=" + this.#ready + ", stale=" + this.#isStale());
+    logger.info("build() called, ready=" + this.#ready + ", stale=" + this.#isStale());
 
     // Skip if index is fresh and has no partial build pending
     const progressMeta = this.#stmtGetMeta.get("tp_index_progress");
     const hasPartialBuild = progressMeta && Number(progressMeta.value) > 0;
     if (this.#ready && !this.#isStale() && !hasPartialBuild) {
-      console.log("[TpItemIndex] Index is fresh, skipping build");
+      logger.info("Index is fresh, skipping build");
       return;
     }
 
     this.#building = true;
 
     try {
-      console.log("[TpItemIndex] Starting index build...");
+      logger.info("Starting index build...");
 
       let processedOffset = hasPartialBuild ? Number(progressMeta.value) : 0;
 
       // Fetch all tradeable item IDs
       const allIds = await this.#apiClient.getAllTradeableItemIds();
       if (!allIds || allIds.length === 0) {
-        console.error("[TpItemIndex] Failed to fetch tradeable item IDs");
+        logger.error("Failed to fetch tradeable item IDs");
         this.#building = false;
         return;
       }
 
-      console.log(`[TpItemIndex] ${allIds.length} tradeable items, resuming from offset ${processedOffset}`);
+      logger.info(`${allIds.length} tradeable items, resuming from offset ${processedOffset}`);
 
       // Batch-fetch item details
       const now = Math.floor(Date.now() / 1000);
@@ -127,7 +131,7 @@ export class TpItemIndex {
         this.#stmtSetMeta.run("tp_index_progress", String(i + BATCH_SIZE));
 
         if ((i / BATCH_SIZE) % 20 === 0) {
-          console.log(`[TpItemIndex] Progress: ${Math.min(i + BATCH_SIZE, allIds.length)}/${allIds.length}`);
+          logger.info(`Progress: ${Math.min(i + BATCH_SIZE, allIds.length)}/${allIds.length}`);
         }
       }
 
@@ -137,9 +141,9 @@ export class TpItemIndex {
       this.#ready = true;
 
       const { cnt } = this.#stmtCount.get();
-      console.log(`[TpItemIndex] Build complete — ${cnt} items indexed`);
+      logger.info(`Build complete — ${cnt} items indexed`);
     } catch (err) {
-      console.error("[TpItemIndex] Build error:", err.message);
+      logger.error("Build error:", err.message);
     } finally {
       this.#building = false;
     }

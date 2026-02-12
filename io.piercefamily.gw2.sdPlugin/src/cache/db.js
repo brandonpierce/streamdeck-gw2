@@ -8,12 +8,15 @@
  * Stream Deck SDK at runtime.
  */
 
+import streamDeck from "@elgato/streamdeck";
 import Database from "better-sqlite3";
 import path from "path";
 import { MAP_TYPES_SEED } from "../seed/map-types.js";
 import { WVW_TEAM_COLORS_SEED } from "../seed/wvw-team-colors.js";
 import { MOUNTS_SEED } from "../seed/mounts.js";
 import { PROFESSIONS_SEED } from "../seed/professions.js";
+
+const logger = streamDeck.logger.createScope("CacheDB");
 
 const SCHEMA_VERSION = 2;
 
@@ -170,7 +173,7 @@ export class CacheDatabase {
       }
     })();
 
-    console.log("[CacheDB] Static data seeded");
+    logger.info("Static data seeded");
   }
 
   /**
@@ -180,7 +183,7 @@ export class CacheDatabase {
     if (this.#db) {
       this.#db.close();
       this.#db = null;
-      console.log("[CacheDB] Database closed");
+      logger.info("Database closed");
     }
   }
 }

@@ -7,6 +7,10 @@
  * with the cache pattern.
  */
 
+import streamDeck from "@elgato/streamdeck";
+
+const logger = streamDeck.logger.createScope("ProfessionsCache");
+
 const STALE_AFTER_DAYS = 90;
 
 export class ProfessionsCache {
@@ -63,8 +67,8 @@ export class ProfessionsCache {
         this.#stmtUpsert.run(data.id, data.name, now);
       }
     } catch (err) {
-      console.error(
-        `[ProfessionsCache] Failed to fetch profession ${professionId}:`,
+      logger.error(
+        `Failed to fetch profession ${professionId}:`,
         err.message
       );
     }

@@ -9,8 +9,10 @@
  * a different item selected by the user.
  */
 
-import { SingletonAction } from "@elgato/streamdeck";
+import streamDeck, { SingletonAction } from "@elgato/streamdeck";
 import { wrapTitle } from "./gw2-action.js";
+
+const logger = streamDeck.logger.createScope("TpPrice");
 
 const POLL_INTERVAL_MS = 60_000;
 
@@ -105,7 +107,7 @@ export class TpPriceAction extends SingletonAction {
           indexBuilding: this.#itemIndex.isBuilding,
         });
       } catch (err) {
-        console.error("[TpPrice] Search error:", err.message);
+        logger.error("Search error:", err.message);
         ev.action.sendToPropertyInspector({
           event: "searchResults",
           results: [],
@@ -153,7 +155,7 @@ export class TpPriceAction extends SingletonAction {
     if (this.#pollTimer) return;
 
     this.#pollTimer = setInterval(() => this.#pollAll(), POLL_INTERVAL_MS);
-    console.log("[TpPrice] Polling started (60s interval)");
+    logger.info("Polling started (60s interval)");
   }
 
   /**
@@ -163,7 +165,7 @@ export class TpPriceAction extends SingletonAction {
     if (this.#pollTimer) {
       clearInterval(this.#pollTimer);
       this.#pollTimer = null;
-      console.log("[TpPrice] Polling stopped");
+      logger.info("Polling stopped");
     }
   }
 
@@ -179,7 +181,7 @@ export class TpPriceAction extends SingletonAction {
         await this.#pricesCache.refresh(settings.itemId);
         this.#renderButton(action, settings);
       } catch (err) {
-        console.error("[TpPrice] Poll error:", err.message);
+        logger.error("Poll error:", err.message);
       }
     }
   }

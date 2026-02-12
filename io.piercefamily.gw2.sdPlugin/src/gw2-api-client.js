@@ -8,6 +8,10 @@
  * Base URL: https://api.guildwars2.com/v2
  */
 
+import streamDeck from "@elgato/streamdeck";
+
+const logger = streamDeck.logger.createScope("GW2Api");
+
 const BASE_URL = "https://api.guildwars2.com/v2";
 
 // GW2 API is generous but let's not abuse it.
@@ -198,15 +202,15 @@ export class GW2ApiClient {
       const response = await fetch(url, { headers });
 
       if (!response.ok) {
-        console.error(
-          `[GW2Api] ${response.status} ${response.statusText} — ${url}`
+        logger.error(
+          `${response.status} ${response.statusText} — ${url}`
         );
         return null;
       }
 
       return await response.json();
     } catch (err) {
-      console.error(`[GW2Api] Fetch error for ${url}:`, err.message);
+      logger.error(`Fetch error for ${url}:`, err.message);
       return null;
     }
   }

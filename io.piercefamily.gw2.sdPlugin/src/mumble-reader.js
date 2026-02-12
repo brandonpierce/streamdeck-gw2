@@ -15,6 +15,9 @@
  */
 
 import koffi from "koffi";
+import streamDeck from "@elgato/streamdeck";
+
+const logger = streamDeck.logger.createScope("MumbleReader");
 
 // --- Windows API constants ---
 const FILE_MAP_ALL_ACCESS = 0x000f001f;
@@ -141,7 +144,7 @@ export class MumbleLinkReader {
       );
 
       if (!this.#hMapFile) {
-        console.error("[MumbleReader] CreateFileMappingW returned null");
+        logger.error("CreateFileMappingW returned null");
         return false;
       }
 
@@ -154,16 +157,16 @@ export class MumbleLinkReader {
       );
 
       if (!this.#pView) {
-        console.error("[MumbleReader] MapViewOfFile returned null");
+        logger.error("MapViewOfFile returned null");
         this.#CloseHandle(this.#hMapFile);
         this.#hMapFile = null;
         return false;
       }
 
-      console.log("[MumbleReader] Shared memory opened successfully");
+      logger.info("Shared memory opened successfully");
       return true;
     } catch (err) {
-      console.error("[MumbleReader] Failed to open shared memory:", err.message);
+      logger.error("Failed to open shared memory:", err.message);
       return false;
     }
   }
@@ -221,7 +224,7 @@ export class MumbleLinkReader {
         cameraFront,
       };
     } catch (err) {
-      console.error("[MumbleReader] Read error:", err.message);
+      logger.error("Read error:", err.message);
       return null;
     }
   }
@@ -249,7 +252,7 @@ export class MumbleLinkReader {
 
       return JSON.parse(identityStr);
     } catch (err) {
-      console.error("[MumbleReader] Identity parse error:", err.message);
+      logger.error("Identity parse error:", err.message);
       return null;
     }
   }
@@ -311,6 +314,6 @@ export class MumbleLinkReader {
       this.#CloseHandle(this.#hMapFile);
       this.#hMapFile = null;
     }
-    console.log("[MumbleReader] Shared memory closed");
+    logger.info("Shared memory closed");
   }
 }
