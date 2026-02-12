@@ -192,6 +192,7 @@ export class GW2ApiClient {
     this.#lastRequestTime = Date.now();
 
     const url = `${BASE_URL}${endpoint}`;
+    const logUrl = url.split("?")[0];
     const headers = { "Accept": "application/json" };
 
     if (this.#apiKey) {
@@ -203,14 +204,14 @@ export class GW2ApiClient {
 
       if (!response.ok) {
         logger.error(
-          `${response.status} ${response.statusText} — ${url}`
+          `${response.status} ${response.statusText} — ${logUrl}`
         );
         return null;
       }
 
       return await response.json();
     } catch (err) {
-      logger.error(`Fetch error for ${url}:`, err.message);
+      logger.error(`Fetch error for ${logUrl}:`, err.message);
       return null;
     }
   }

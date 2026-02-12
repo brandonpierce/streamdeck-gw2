@@ -7,20 +7,20 @@
  *
  * Usage:
  *   npm run test:cache
- *   (or: node src/test-cache.js)
+ *   (or: node test/test-cache.js)
  */
 
 import path from "path";
 import { fileURLToPath } from "url";
 import { mkdirSync } from "fs";
-import { CacheDatabase } from "./cache/db.js";
-import { GW2ApiClient } from "./gw2-api-client.js";
-import { MapsCache } from "./cache/maps.js";
-import { ProfessionsCache } from "./cache/professions.js";
-import { SpecializationsCache } from "./cache/specializations.js";
-import { MountsCache } from "./cache/mounts.js";
-import { MapTypesCache } from "./cache/map-types.js";
-import { WvWTeamColorsCache } from "./cache/wvw-team-colors.js";
+import { CacheDatabase } from "../io.piercefamily.gw2.sdPlugin/src/cache/db.js";
+import { GW2ApiClient } from "../io.piercefamily.gw2.sdPlugin/src/gw2-api-client.js";
+import { MapsCache } from "../io.piercefamily.gw2.sdPlugin/src/cache/maps.js";
+import { ProfessionsCache } from "../io.piercefamily.gw2.sdPlugin/src/cache/professions.js";
+import { SpecializationsCache } from "../io.piercefamily.gw2.sdPlugin/src/cache/specializations.js";
+import { MountsCache } from "../io.piercefamily.gw2.sdPlugin/src/cache/mounts.js";
+import { MapTypesCache } from "../io.piercefamily.gw2.sdPlugin/src/cache/map-types.js";
+import { WvWTeamColorsCache } from "../io.piercefamily.gw2.sdPlugin/src/cache/wvw-team-colors.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEST_DATA_DIR = path.join(__dirname, "..", "data-test");
@@ -34,7 +34,7 @@ console.log("=== Cache Layer Test ===\n");
 console.log("1. Initializing SQLite database...");
 const cacheDb = new CacheDatabase(TEST_DATA_DIR);
 const db = cacheDb.db;
-console.log("   ✓ Database created and schema initialized\n");
+console.log("   \u2713 Database created and schema initialized\n");
 
 // Test seeded data
 console.log("2. Testing seeded static data...");
@@ -50,7 +50,7 @@ console.log(`   Mount 8:     ${mounts.get(8).name}`);      // "Skyscale"
 console.log(`   Mount 99:    ${mounts.get(99).name}`);     // "Mount 99" (unknown)
 console.log(`   Team 0:      ${teamColors.get(0).name}`);  // "None"
 console.log(`   Team 9:      ${teamColors.get(9).name}`);  // "Red"
-console.log("   ✓ Seeded data looks good\n");
+console.log("   \u2713 Seeded data looks good\n");
 
 // Test API-backed caches
 console.log("3. Testing GW2 API fetch + cache...");

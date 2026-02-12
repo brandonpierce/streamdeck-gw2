@@ -112,6 +112,35 @@ export class StateManager {
   }
 
   /**
+   * Restart polling after a system wake event.
+   * Closes and reopens the MumbleLink shared memory handle (which may
+   * have gone stale during sleep), resets previous state so all listeners
+   * get a fresh update, and restarts the poll timer. Does NOT close the
+   * database — SQLite handles sleep/wake fine.
+   */
+  restart() {
+    logger.info("Restarting after system wake...");
+
+    if (this.#pollTimer) {
+      clearInterval(this.#pollTimer);
+      this.#pollTimer = null;
+    }
+
+    this.#reader.close();
+    this.#previousState = null;
+
+    const opened = this.#reader.open();
+    if (!opened) {
+      logger.error("Failed to reopen MumbleLink after wake — will retry on next poll");
+    }
+
+    this.#pollTimer = setInterval(() => this.#poll(), POLL_INTERVAL_MS);
+    logger.info("Restart complete — polling resumed");
+
+    this.#poll();
+  }
+
+  /**
    * Register a listener for state changes.
    *
    * @param {string} field — which state field to watch. Use '*' for all changes.

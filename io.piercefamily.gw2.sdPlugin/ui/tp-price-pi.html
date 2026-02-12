@@ -209,39 +209,49 @@
 
     function renderResults(results) {
       const container = document.getElementById("results");
+      container.textContent = "";
+
       if (results.length === 0) {
         const query = document.getElementById("searchInput").value;
-        container.innerHTML = query.length >= 2
-          ? '<div class="status">No items found</div>'
-          : '';
+        if (query.length >= 2) {
+          var statusDiv = document.createElement("div");
+          statusDiv.className = "status";
+          statusDiv.textContent = "No items found";
+          container.appendChild(statusDiv);
+        }
         return;
       }
 
-      container.innerHTML = results.map(function (item) {
-        return '<div class="result-item" data-id="' + item.id + '" data-name="' + escapeHtml(item.name) + '" data-rarity="' + (item.rarity || '') + '">'
-          + '<span class="rarity-' + (item.rarity || '') + '">' + escapeHtml(item.name) + '</span>'
-          + '<span class="rarity">' + (item.rarity || '') + '</span>'
-          + '</div>';
-      }).join('');
+      results.forEach(function (item) {
+        var row = document.createElement("div");
+        row.className = "result-item";
+        row.dataset.id = item.id;
+        row.dataset.name = item.name;
+        row.dataset.rarity = item.rarity || "";
 
-      // Attach click handlers
-      container.querySelectorAll(".result-item").forEach(function (el) {
-        el.addEventListener("click", function () {
+        var nameSpan = document.createElement("span");
+        nameSpan.className = "rarity-" + (item.rarity || "");
+        nameSpan.textContent = item.name;
+
+        var raritySpan = document.createElement("span");
+        raritySpan.className = "rarity";
+        raritySpan.textContent = item.rarity || "";
+
+        row.appendChild(nameSpan);
+        row.appendChild(raritySpan);
+
+        row.addEventListener("click", function () {
           setSettings({
-            itemId: Number(el.dataset.id),
-            itemName: el.dataset.name,
-            itemRarity: el.dataset.rarity
+            itemId: Number(row.dataset.id),
+            itemName: row.dataset.name,
+            itemRarity: row.dataset.rarity
           });
           document.getElementById("searchInput").value = "";
-          container.innerHTML = "";
+          container.textContent = "";
         });
-      });
-    }
 
-    function escapeHtml(str) {
-      var div = document.createElement("div");
-      div.textContent = str;
-      return div.innerHTML;
+        container.appendChild(row);
+      });
     }
 
     // Debounced search

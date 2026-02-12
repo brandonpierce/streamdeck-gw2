@@ -8,8 +8,10 @@
     "build": "echo 'No build step required'",
     "link": "streamdeck link io.piercefamily.gw2.sdPlugin",
     "restart": "streamdeck restart io.piercefamily.gw2",
-    "test:mumble": "node io.piercefamily.gw2.sdPlugin/src/test-mumble.js",
-    "test:cache": "node io.piercefamily.gw2.sdPlugin/src/test-cache.js"
+    "test:mumble": "node test/test-mumble.js",
+    "test:cache": "node test/test-cache.js",
+    "validate": "streamdeck validate io.piercefamily.gw2.sdPlugin",
+    "pack": "streamdeck pack io.piercefamily.gw2.sdPlugin"
   },
   "dependencies": {
     "@elgato/streamdeck": "^2.0.0",

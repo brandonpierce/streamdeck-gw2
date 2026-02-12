@@ -1,16 +1,18 @@
 {
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
   "UUID": "io.piercefamily.gw2",
-  "Name": "GW2 MumbleLink",
-  "Version": "0.1.0",
+  "Name": "$Name",
+  "Version": "0.1.0.0",
   "Author": "piercefamily",
-  "Description": "Real-time Guild Wars 2 status via MumbleLink shared memory",
-  "Category": "Guild Wars 2",
+  "Description": "$Description",
+  "SupportURL": "https://github.com/brandonpierce/streamdeck-gw2/issues",
+  "Category": "$Category",
   "CategoryIcon": "imgs/category-icon",
   "Icon": "imgs/plugin-icon",
   "CodePath": "bin/plugin.js",
   "SDKVersion": 2,
   "Software": {
-    "MinimumVersion": "6.4"
+    "MinimumVersion": "6.7"
   },
   "OS": [
     {
@@ -20,14 +22,14 @@
   ],
   "Nodejs": {
     "Version": "20",
-    "Debug": "enabled"
+    "Debug": "disabled"
   },
   "Actions": [
     {
-      "Name": "Profession & Spec",
+      "Name": "$io.piercefamily.gw2.profession.Name",
       "UUID": "io.piercefamily.gw2.profession",
       "Icon": "imgs/actions/profession",
-      "Tooltip": "Shows current character profession and elite specialization",
+      "Tooltip": "$io.piercefamily.gw2.profession.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -38,10 +40,10 @@
       ]
     },
     {
-      "Name": "Game Mode",
+      "Name": "$io.piercefamily.gw2.gamemode.Name",
       "UUID": "io.piercefamily.gw2.gamemode",
       "Icon": "imgs/actions/gamemode",
-      "Tooltip": "Shows current game mode (Open World, WvW, PvP, etc.)",
+      "Tooltip": "$io.piercefamily.gw2.gamemode.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -52,10 +54,10 @@
       ]
     },
     {
-      "Name": "Map Name",
+      "Name": "$io.piercefamily.gw2.mapname.Name",
       "UUID": "io.piercefamily.gw2.mapname",
       "Icon": "imgs/actions/mapname",
-      "Tooltip": "Shows current map name",
+      "Tooltip": "$io.piercefamily.gw2.mapname.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -66,10 +68,10 @@
       ]
     },
     {
-      "Name": "Combat Status",
+      "Name": "$io.piercefamily.gw2.combat.Name",
       "UUID": "io.piercefamily.gw2.combat",
       "Icon": "imgs/actions/combat",
-      "Tooltip": "Shows whether character is in combat",
+      "Tooltip": "$io.piercefamily.gw2.combat.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -80,10 +82,10 @@
       ]
     },
     {
-      "Name": "Chat Focus",
+      "Name": "$io.piercefamily.gw2.chatfocus.Name",
       "UUID": "io.piercefamily.gw2.chatfocus",
       "Icon": "imgs/actions/chatfocus",
-      "Tooltip": "Shows whether chat textbox has focus",
+      "Tooltip": "$io.piercefamily.gw2.chatfocus.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -94,10 +96,10 @@
       ]
     },
     {
-      "Name": "Commander",
+      "Name": "$io.piercefamily.gw2.commander.Name",
       "UUID": "io.piercefamily.gw2.commander",
       "Icon": "imgs/actions/commander",
-      "Tooltip": "Shows whether commander tag is active",
+      "Tooltip": "$io.piercefamily.gw2.commander.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -108,10 +110,10 @@
       ]
     },
     {
-      "Name": "Mount",
+      "Name": "$io.piercefamily.gw2.mount.Name",
       "UUID": "io.piercefamily.gw2.mount",
       "Icon": "imgs/actions/mount",
-      "Tooltip": "Shows current mount",
+      "Tooltip": "$io.piercefamily.gw2.mount.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -122,10 +124,10 @@
       ]
     },
     {
-      "Name": "WvW Team",
+      "Name": "$io.piercefamily.gw2.wvwteam.Name",
       "UUID": "io.piercefamily.gw2.wvwteam",
       "Icon": "imgs/actions/wvwteam",
-      "Tooltip": "Shows WvW team color assignment",
+      "Tooltip": "$io.piercefamily.gw2.wvwteam.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -136,10 +138,10 @@
       ]
     },
     {
-      "Name": "Game Focus",
+      "Name": "$io.piercefamily.gw2.gamefocus.Name",
       "UUID": "io.piercefamily.gw2.gamefocus",
       "Icon": "imgs/actions/gamefocus",
-      "Tooltip": "Shows whether GW2 is the active window",
+      "Tooltip": "$io.piercefamily.gw2.gamefocus.Tooltip",
       "Controllers": ["Keypad"],
       "States": [
         {
@@ -150,10 +152,10 @@
       ]
     },
     {
-      "Name": "TP Price",
+      "Name": "$io.piercefamily.gw2.tpprice.Name",
       "UUID": "io.piercefamily.gw2.tpprice",
       "Icon": "imgs/actions/tpprice",
-      "Tooltip": "Shows Trading Post price for a chosen item",
+      "Tooltip": "$io.piercefamily.gw2.tpprice.Tooltip",
       "PropertyInspectorPath": "ui/tp-price-pi.html",
       "Controllers": ["Keypad"],
       "States": [

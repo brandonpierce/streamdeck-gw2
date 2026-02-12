@@ -71,6 +71,12 @@ streamDeck.connect().then(() => {
   logger.info("Connected to Stream Deck");
   stateManager.start();
 
+  // Re-initialize MumbleLink after system wake (shared memory handle may be stale)
+  streamDeck.system.onSystemDidWakeUp(() => {
+    logger.info("System woke up — restarting state manager");
+    stateManager.restart();
+  });
+
   // Build TP item index in background (no-op if already fresh)
   tpItemIndex.build().catch((err) => {
     logger.error("TP item index build failed:", err.message);

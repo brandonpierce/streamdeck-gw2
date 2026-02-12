@@ -6,10 +6,10 @@
  *
  * Usage:
  *   npm run test:mumble
- *   (or: node src/test-mumble.js)
+ *   (or: node test/test-mumble.js)
  */
 
-import { MumbleLinkReader } from "./mumble-reader.js";
+import { MumbleLinkReader } from "../io.piercefamily.gw2.sdPlugin/src/mumble-reader.js";
 
 const reader = new MumbleLinkReader();
 
@@ -45,7 +45,7 @@ const interval = setInterval(() => {
   const ctx = data.context || {};
   const ui = ctx.uiState || {};
 
-  console.log("─".repeat(60));
+  console.log("\u2500".repeat(60));
   console.log(`  uiTick:      ${data.uiTick}`);
   console.log(`  Character:   ${id.name || "?"} (${id.race ?? "?"})`);
   console.log(`  Profession:  ${id.profession || "?"} | Spec: ${id.spec || "none"}`);
