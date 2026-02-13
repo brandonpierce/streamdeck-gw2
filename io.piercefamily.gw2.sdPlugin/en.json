@@ -2,24 +2,44 @@
   "Name": "GW2 MumbleLink",
   "Description": "Real-time Guild Wars 2 status via MumbleLink shared memory",
   "Category": "Guild Wars 2",
-  "io.piercefamily.gw2.profession.Name": "Profession & Spec",
-  "io.piercefamily.gw2.profession.Tooltip": "Shows current character profession and elite specialization",
-  "io.piercefamily.gw2.gamemode.Name": "Game Mode",
-  "io.piercefamily.gw2.gamemode.Tooltip": "Shows current game mode (Open World, WvW, PvP, etc.)",
-  "io.piercefamily.gw2.mapname.Name": "Map Name",
-  "io.piercefamily.gw2.mapname.Tooltip": "Shows current map name",
-  "io.piercefamily.gw2.combat.Name": "Combat Status",
-  "io.piercefamily.gw2.combat.Tooltip": "Shows whether character is in combat",
-  "io.piercefamily.gw2.chatfocus.Name": "Chat Focus",
-  "io.piercefamily.gw2.chatfocus.Tooltip": "Shows whether chat textbox has focus",
-  "io.piercefamily.gw2.commander.Name": "Commander",
-  "io.piercefamily.gw2.commander.Tooltip": "Shows whether commander tag is active",
-  "io.piercefamily.gw2.mount.Name": "Mount",
-  "io.piercefamily.gw2.mount.Tooltip": "Shows current mount",
-  "io.piercefamily.gw2.wvwteam.Name": "WvW Team",
-  "io.piercefamily.gw2.wvwteam.Tooltip": "Shows WvW team color assignment",
-  "io.piercefamily.gw2.gamefocus.Name": "Game Focus",
-  "io.piercefamily.gw2.gamefocus.Tooltip": "Shows whether GW2 is the active window",
-  "io.piercefamily.gw2.tpprice.Name": "TP Price",
-  "io.piercefamily.gw2.tpprice.Tooltip": "Shows Trading Post price for a chosen item"
+  "io.piercefamily.gw2.profession": {
+    "Name": "Profession & Spec",
+    "Tooltip": "Shows current character profession and elite specialization"
+  },
+  "io.piercefamily.gw2.gamemode": {
+    "Name": "Game Mode",
+    "Tooltip": "Shows current game mode (Open World, WvW, PvP, etc.)"
+  },
+  "io.piercefamily.gw2.mapname": {
+    "Name": "Map Name",
+    "Tooltip": "Shows current map name"
+  },
+  "io.piercefamily.gw2.combat": {
+    "Name": "Combat Status",
+    "Tooltip": "Shows whether character is in combat"
+  },
+  "io.piercefamily.gw2.chatfocus": {
+    "Name": "Chat Focus",
+    "Tooltip": "Shows whether chat textbox has focus"
+  },
+  "io.piercefamily.gw2.commander": {
+    "Name": "Commander",
+    "Tooltip": "Shows whether commander tag is active"
+  },
+  "io.piercefamily.gw2.mount": {
+    "Name": "Mount",
+    "Tooltip": "Shows current mount"
+  },
+  "io.piercefamily.gw2.wvwteam": {
+    "Name": "WvW Team",
+    "Tooltip": "Shows WvW team color assignment"
+  },
+  "io.piercefamily.gw2.gamefocus": {
+    "Name": "Game Focus",
+    "Tooltip": "Shows whether GW2 is the active window"
+  },
+  "io.piercefamily.gw2.tpprice": {
+    "Name": "TP Price",
+    "Tooltip": "Shows Trading Post price for a chosen item"
+  }
 }
